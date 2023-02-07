@@ -1,21 +1,3 @@
-/*const posicoes = {
-  1: 243px 30px
-  2: 300px 20px
-  3: 300px 20px
-  4: 300px 20px
-  5: 300px 20px
-  6: 300px 20px
-  7: 300px 20px
-  8: 300px 20px
-  9: 300px 20px
-
-
-/*
-  GAME LOOP:
-    TOUPEIRA
-
-*/
-
 const canvas = document.querySelector('#myCanvas');
 const scoreText = document.querySelector('#scoreText');
 let score = 0;
@@ -33,8 +15,9 @@ let offsetY = 120;
 let index = 1;
 const sizeX = 50;
 const sizeY = 50;
-
-
+const displayMoleInterval = 1000;
+const clearMoleInterval = displayMoleInterval - 500;
+const toupeiraOffset = 5;
 const positions = {
 }
 let globalExactPosition = {};
@@ -61,31 +44,18 @@ for (let i = 0; i < 3; i += 1) {
   currentPosX += offsetX;
 }
 
-// toupeira
-console.log(positions)
 const exactPosition = () => {
   const index =  Math.floor(Math.random() * 9 + 1);
   return positions[index];
 }
 
-
 const drawToupeira = (cor, ini, fim) => {
-  // Randomiza numero
-  // const index =  Math.floor(Math.random() * 9 + 1);
-  // console.log(index)
-  // Acessa objeto com numero
-  // Retorna posições
-  // const { initialX, initialY } = exactPosition();
   ctx.beginPath();
   ctx.rect(ini + 5, fim + 5, 40, 40);
   ctx.fillStyle = cor;
   ctx.fill();
   ctx.closePath();
-  console.log('i', ini, fim)
-  // return { initialX, initialY }
 }
-
-const toupeiraOffset = 5;
 
 const clearToupeira = () => {
   const { initialX, initialY } = drawToupeira();
@@ -94,12 +64,8 @@ const clearToupeira = () => {
   ctx.fillStyle = "#FF000";
   ctx.fill();
   ctx.closePath();
-  console.log('f', initialX, initialY)
-
   return { initialX, initialY }
 }
-
-
 
 setInterval((() => {
   const { initialX, initialY, finalX, finalY } = exactPosition();
@@ -108,8 +74,8 @@ setInterval((() => {
   const timeoutID = setTimeout((() => {
     drawToupeira('#FF0000', initialX, initialY)
     clearTimeout(timeoutID)
-  }), 1000);
-}), 1500);
+  }), clearMoleInterval);
+}), displayMoleInterval);
 
 
 canvas.addEventListener('click', (evt) => {
@@ -117,6 +83,7 @@ canvas.addEventListener('click', (evt) => {
   const mouseX = evt.clientX - rect.left;
   const mouseY = evt.clientY - rect.top;
   const { initialX, initialY, finalX, finalY } = globalExactPosition;
+  console.log(globalExactPosition)
   if (mouseX >= initialX + toupeiraOffset && mouseX <= finalX - toupeiraOffset 
       && mouseY >= initialY + toupeiraOffset && mouseY <= finalY - toupeiraOffset
     ) {
@@ -126,4 +93,3 @@ canvas.addEventListener('click', (evt) => {
       scoreText.innerHTML = score;
     }
 });
-// setInterval(clearToupeira, 5000);
