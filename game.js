@@ -59,22 +59,49 @@ for (let i = 0; i < 3; i += 1) {
 
 // toupeira
 console.log(positions)
-
-const drawToupeira = () => {
-  // Randomiza numero
-  const index =  Math.floor(Math.random() * (9 - 1 + 1) + 1);
-  console.log(index)
-  // Acessa objeto com numero
-  // Retorna posições
-  const toupeiraX = positions[randomico].x;
-  const toupeiraY = positions[randomico].y;
-  ctx.beginPath();
-  ctx.rect(toupeiraX, toupeiraY, 25, 90);
-  ctx.fillStyle = "#000000";
-  ctx.fill();
-  ctx.closePath();
+const exactPosition = () => {
+  const index =  Math.floor(Math.random() * 9 + 1);
+  return positions[index];
 }
 
-setInterval(() => {
-  drawToupeira();
-}, 100000);
+
+const drawToupeira = (cor, ini, fim) => {
+  // Randomiza numero
+  // const index =  Math.floor(Math.random() * 9 + 1);
+  // console.log(index)
+  // Acessa objeto com numero
+  // Retorna posições
+  // const { initialX, initialY } = exactPosition();
+  ctx.beginPath();
+  ctx.rect(ini + 5, fim + 5, 40, 40);
+  ctx.fillStyle = cor;
+  ctx.fill();
+  ctx.closePath();
+  console.log('i', ini, fim)
+  // return { initialX, initialY }
+}
+
+const clearToupeira = () => {
+  const { initialX, initialY } = drawToupeira();
+  ctx.beginPath();
+  ctx.rect(initialX + 5, initialY + 5, 40, 40);
+  ctx.fillStyle = "#FF0000";
+  ctx.fill();
+  ctx.closePath();
+  console.log('f', initialX, initialY)
+
+  return { initialX, initialY }
+}
+
+setInterval((() => {
+  const { initialX, initialY } = exactPosition();
+  drawToupeira('#000', initialX, initialY)
+  const timeoutID = setTimeout((() => {
+    drawToupeira('#FF0000', initialX, initialY)
+    clearTimeout(timeoutID)
+  }), 2500);
+}), 3000);
+
+
+
+// setInterval(clearToupeira, 5000);
