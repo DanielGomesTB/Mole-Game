@@ -9,7 +9,7 @@ const scoreText = document.querySelector('#scoreText');
 const body = document.querySelector('body');
 
 // import
-canvas.style.backgroundImage = "url(../images/grass.png)";
+// canvas.style.backgroundImage = "url(../images/grass.png)";
 body.style.cursor = "url(../images/hammerIdle.png), auto";
 buracoImg.src = "../images/buraco.png";
 moleImg.src = "../images/toupeirinha.png";
@@ -22,8 +22,8 @@ const sizeX = 50;
 const sizeY = 50;
 const displayMoleInterval = 1500;
 const clearMoleInterval = displayMoleInterval - 500;
-const canvasWidth = canvas.offsetWidth - 2;
-const canvasHeight = canvas.offsetHeight - 2;
+// const canvasWidth = canvas.offsetWidth;
+// const canvasHeight = canvas.offsetHeight;
 const toupeiraOffset = 5;
 const positions = {}
 
@@ -46,22 +46,10 @@ const setPath = (color, x, y, width, height) => {
   ctx.closePath();
 }
 
-
-// criação dos buracos horizontais
-for (let i = 0; i < 3; i += 1) {
-  setPath("#FF0000", currentPosX, currentPosY, sizeX, sizeY)
-  positions[index] = { 
-    initialX: currentPosX, 
-    initialY: currentPosY, 
-    finalX: currentPosX + sizeX, 
-    finalY: currentPosY + sizeY 
-  };
-  index += 1;
-
-  // criação dos buracos verticais
-  for (let j = 0; j < 2; j += 1) {
-    currentPosY += offsetY;
-    setPath("#FF0000", currentPosX, currentPosY, 50, 50)
+// cria o campo do jogo
+const createField = () => {
+   for (let i = 0; i < 3; i += 1) {
+    ctx.drawImage(buracoImg, currentPosX += 20, currentPosY += 20);
     positions[index] = { 
       initialX: currentPosX, 
       initialY: currentPosY, 
@@ -69,10 +57,28 @@ for (let i = 0; i < 3; i += 1) {
       finalY: currentPosY + sizeY 
     };
     index += 1;
+  
+    // criação dos buracos verticais
+    for (let j = 0; j < 2; j += 1) {
+      currentPosY += offsetY;
+      ctx.drawImage(buracoImg, currentPosX, currentPosY);
+      positions[index] = { 
+        initialX: currentPosX, 
+        initialY: currentPosY, 
+        finalX: currentPosX + sizeX, 
+        finalY: currentPosY + sizeY 
+      };
+      index += 1;
+    }
+    currentPosY =  initialPosY;
+    currentPosX += offsetX;
   }
-  currentPosY =  initialPosY;
-  currentPosX += offsetX;
+  canvas.style.backgroundImage = "url(../images/grass.png)";
 }
+
+setTimeout(() => {
+  createField()
+}, 100)
 
 // randomiza a toupeira nos buracos
 const setMolePosition = () => {
@@ -85,21 +91,15 @@ const drawToupeira = (color, ini, end, dim) => {
   setPath(color, ini + 5, end + 5, dim, dim)
 }
 
-// apaga a toupeira
-const clearToupeira = () => {
-  const { initialX, initialY } = drawToupeira();
-  setPath("#FF000", initialX + toupeiraOffset, initialY + toupeiraOffset, 40, 40)
-  return { initialX, initialY }
-}
-
 // spawna a topeira
 setInterval((() => {
   const { initialX, initialY, finalX, finalY } = setMolePosition();
   globalMolePosition = { initialX, initialY, finalX, finalY };
-  drawToupeira('#000', initialX, initialY, 40);
-  ctx.drawImage(moleImg, initialX + 2.5, initialY + 2.5);
+  // drawToupeira('#000', initialX, initialY, 40);
+  ctx.drawImage(moleImg, initialX + 2.5, initialY - 16);
   const timeoutID = setTimeout((() => {
-    drawToupeira('#FF0000', initialX - 5, initialY - 5, 50)
+    // drawToupeira('#FF0000', initialX - 5, initialY - 5, 50)
+    createField()
     globalMolePosition = {}
     clearTimeout(timeoutID)
   }), clearMoleInterval);
