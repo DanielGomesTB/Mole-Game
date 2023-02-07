@@ -8,7 +8,7 @@ const ctx = canvas.getContext("2d");
 const scoreText = document.querySelector('#scoreText');
 const body = document.querySelector('body');
 
-// images import
+// import
 canvas.style.backgroundImage = "url(../images/grass.png)";
 body.style.cursor = "url(../images/hammerIdle.png), auto";
 buracoImg.src = "../images/buraco.png";
@@ -37,25 +37,37 @@ let currentPosX = initialPosX;
 let currentPosY = initialPosY;
 let globalMolePosition = {};
 
-// criação dos buracos horizontais
-for (let i = 0; i < 3; i += 1) {
+// ctx generico
+const setPath = (color, x, y, width, height) => {
   ctx.beginPath();
-  ctx.rect(currentPosX, currentPosY, sizeX, sizeY);
-  ctx.fillStyle = "#FF0000";
+  ctx.rect(x, y, width, height);
+  ctx.fillStyle = color;
   ctx.fill();
   ctx.closePath();
-  positions[index] = { initialX: currentPosX, initialY: currentPosY, finalX: currentPosX + sizeX, finalY: currentPosY + sizeY };
+}
+
+
+// criação dos buracos horizontais
+for (let i = 0; i < 3; i += 1) {
+  setPath("#FF0000", currentPosX, currentPosY, sizeX, sizeY)
+  positions[index] = { 
+    initialX: currentPosX, 
+    initialY: currentPosY, 
+    finalX: currentPosX + sizeX, 
+    finalY: currentPosY + sizeY 
+  };
   index += 1;
 
   // criação dos buracos verticais
   for (let j = 0; j < 2; j += 1) {
     currentPosY += offsetY;
-    ctx.beginPath();
-    ctx.rect(currentPosX, currentPosY, 50, 50);
-    ctx.fillStyle = "#FF0000";
-    ctx.fill();
-    ctx.closePath();
-    positions[index] = { initialX: currentPosX, initialY: currentPosY, finalX: currentPosX + sizeX, finalY: currentPosY + sizeY };
+    setPath("#FF0000", currentPosX, currentPosY, 50, 50)
+    positions[index] = { 
+      initialX: currentPosX, 
+      initialY: currentPosY, 
+      finalX: currentPosX + sizeX, 
+      finalY: currentPosY + sizeY 
+    };
     index += 1;
   }
   currentPosY =  initialPosY;
@@ -70,21 +82,13 @@ const setMolePosition = () => {
 
 // cria a toupeira
 const drawToupeira = (color, ini, end, dim) => {
-  ctx.beginPath();
-  ctx.rect(ini + 5, end + 5, dim, dim);
-  ctx.fillStyle = color;
-  ctx.fill();
-  ctx.closePath();
+  setPath(color, ini + 5, end + 5, dim, dim)
 }
 
 // apaga a toupeira
 const clearToupeira = () => {
   const { initialX, initialY } = drawToupeira();
-  ctx.beginPath();
-  ctx.rect(initialX + toupeiraOffset, initialY + toupeiraOffset, 40, 40);
-  ctx.fillStyle = "#FF000";
-  ctx.fill();
-  ctx.closePath();
+  setPath("#FF000", initialX + toupeiraOffset, initialY + toupeiraOffset, 40, 40)
   return { initialX, initialY }
 }
 
