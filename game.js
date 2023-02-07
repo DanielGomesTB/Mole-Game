@@ -59,22 +59,40 @@ for (let i = 0; i < 3; i += 1) {
 
 // toupeira
 console.log(positions)
+const exactPosition = () => {
+  const index =  Math.floor(Math.random() * 9 + 1);
+  return positions[index];
+}
+
 
 const drawToupeira = () => {
   // Randomiza numero
-  const index =  Math.floor(Math.random() * (9 - 1 + 1) + 1);
-  console.log(index)
+  // const index =  Math.floor(Math.random() * 9 + 1);
+  // console.log(index)
   // Acessa objeto com numero
   // Retorna posições
-  const toupeiraX = positions[randomico].x;
-  const toupeiraY = positions[randomico].y;
+  const { initialX, initialY } = exactPosition();
   ctx.beginPath();
-  ctx.rect(toupeiraX, toupeiraY, 25, 90);
+  ctx.rect(initialX + 5, initialY + 5, 40, 40);
   ctx.fillStyle = "#000000";
+  ctx.fill();
+  ctx.closePath();
+  return { initialX, initialY }
+}
+
+const clearToupeira = () => {
+  const { initialX, initialY } = drawToupeira();
+  ctx.beginPath();
+  ctx.rect(initialX + 5, initialY + 5, 40, 40);
+  ctx.fillStyle = "#FF0000";
   ctx.fill();
   ctx.closePath();
 }
 
 setInterval(() => {
   drawToupeira();
-}, 100000);
+}, 10000)
+
+setInterval(() => {
+  clearToupeira()
+}, 10000);
