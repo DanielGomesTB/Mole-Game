@@ -17,10 +17,12 @@
 */
 
 const canvas = document.querySelector('#myCanvas');
+const scoreText = document.querySelector('#scoreText');
+let score = 0;
+scoreText.innerHTML = score;
 const ctx = canvas.getContext("2d");
 const canvasWidth = canvas.offsetWidth - 2;
 const canvasHeight = canvas.offsetHeight - 2;
-
 const buracos = 9;
 const initialPosX = 40;
 const initialPosY = 80;
@@ -32,8 +34,10 @@ let index = 1;
 const sizeX = 50;
 const sizeY = 50;
 
+
 const positions = {
 }
+let globalExactPosition = {};
 
 for (let i = 0; i < 3; i += 1) {
   ctx.beginPath();
@@ -81,11 +85,13 @@ const drawToupeira = (cor, ini, fim) => {
   // return { initialX, initialY }
 }
 
+const toupeiraOffset = 5;
+
 const clearToupeira = () => {
   const { initialX, initialY } = drawToupeira();
   ctx.beginPath();
-  ctx.rect(initialX + 5, initialY + 5, 40, 40);
-  ctx.fillStyle = "#FF0000";
+  ctx.rect(initialX + toupeiraOffset, initialY + toupeiraOffset, 40, 40);
+  ctx.fillStyle = "#FF000";
   ctx.fill();
   ctx.closePath();
   console.log('f', initialX, initialY)
@@ -93,15 +99,31 @@ const clearToupeira = () => {
   return { initialX, initialY }
 }
 
+
+
 setInterval((() => {
-  const { initialX, initialY } = exactPosition();
+  const { initialX, initialY, finalX, finalY } = exactPosition();
+  globalExactPosition = { initialX, initialY, finalX, finalY };
   drawToupeira('#000', initialX, initialY)
   const timeoutID = setTimeout((() => {
     drawToupeira('#FF0000', initialX, initialY)
     clearTimeout(timeoutID)
-  }), 2500);
-}), 3000);
+  }), 1000);
+}), 1500);
 
 
-
+canvas.addEventListener('click', (evt) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = evt.clientX - rect.left;
+  const mouseY = evt.clientY - rect.top;
+  const { initialX, initialY, finalX, finalY } = globalExactPosition;
+  if (mouseX >= initialX + toupeiraOffset && mouseX <= finalX - toupeiraOffset 
+      && mouseY >= initialY + toupeiraOffset && mouseY <= finalY - toupeiraOffset
+    ) {
+      score += 1;
+      // Para evitar farm de pontos, reseta a posição CONHECIDA da toupeira pelo mouse
+      globalExactPosition = {};
+      scoreText.innerHTML = score;
+    }
+});
 // setInterval(clearToupeira, 5000);
