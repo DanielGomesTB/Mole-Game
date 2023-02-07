@@ -1,5 +1,10 @@
 const canvas = document.querySelector('#myCanvas');
+canvas.style.backgroundImage = "url(grass.png)";
 const scoreText = document.querySelector('#scoreText');
+const body = document.querySelector('body');
+body.style.cursor = "url(hammerIdle.png), auto";
+const moleImg = new Image();
+const buracoImg = new Image();
 let score = 0;
 scoreText.innerHTML = score;
 const ctx = canvas.getContext("2d");
@@ -15,19 +20,22 @@ let offsetY = 120;
 let index = 1;
 const sizeX = 50;
 const sizeY = 50;
-const displayMoleInterval = 1000;
+const displayMoleInterval = 1500;
 const clearMoleInterval = displayMoleInterval - 500;
 const toupeiraOffset = 5;
 const positions = {
 }
 let globalExactPosition = {};
 
+console.log(typeof moleImg)
+buracoImg.src = "buraco.png";
 for (let i = 0; i < 3; i += 1) {
   ctx.beginPath();
   ctx.rect(currentPosX, currentPosY, sizeX, sizeY);
   ctx.fillStyle = "#FF0000";
   ctx.fill();
   ctx.closePath();
+
   positions[index] = { initialX: currentPosX, initialY: currentPosY, finalX: currentPosX + sizeX, finalY: currentPosY + sizeY };
   index += 1;
   for (let j = 0; j < 2; j += 1) {
@@ -49,9 +57,9 @@ const exactPosition = () => {
   return positions[index];
 }
 
-const drawToupeira = (cor, ini, fim) => {
+const drawToupeira = (cor, ini, fim, dim) => {
   ctx.beginPath();
-  ctx.rect(ini + 5, fim + 5, 40, 40);
+  ctx.rect(ini + 5, fim + 5, dim, dim);
   ctx.fillStyle = cor;
   ctx.fill();
   ctx.closePath();
@@ -70,9 +78,12 @@ const clearToupeira = () => {
 setInterval((() => {
   const { initialX, initialY, finalX, finalY } = exactPosition();
   globalExactPosition = { initialX, initialY, finalX, finalY };
-  drawToupeira('#000', initialX, initialY)
+  drawToupeira('#000', initialX, initialY, 40);
+  moleImg.src = "mole.png";
+  ctx.drawImage(moleImg, initialX, initialY);
   const timeoutID = setTimeout((() => {
-    drawToupeira('#FF0000', initialX, initialY)
+    drawToupeira('#FF0000', initialX - 5, initialY - 5, 50)
+    globalExactPosition = {}
     clearTimeout(timeoutID)
   }), clearMoleInterval);
 }), displayMoleInterval);
@@ -83,7 +94,6 @@ canvas.addEventListener('click', (evt) => {
   const mouseX = evt.clientX - rect.left;
   const mouseY = evt.clientY - rect.top;
   const { initialX, initialY, finalX, finalY } = globalExactPosition;
-  console.log(globalExactPosition)
   if (mouseX >= initialX + toupeiraOffset && mouseX <= finalX - toupeiraOffset 
       && mouseY >= initialY + toupeiraOffset && mouseY <= finalY - toupeiraOffset
     ) {
@@ -93,3 +103,11 @@ canvas.addEventListener('click', (evt) => {
       scoreText.innerHTML = score;
     }
 });
+/*
+body.addEventListener('mousedown', () => {
+  body.style.cursor = "url(hammerMove.png), auto";
+})
+
+body.addEventListener('mouseup', () => {
+  body.style.cursor = "url(hammerIdle.png), auto";
+})*/
