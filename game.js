@@ -10,7 +10,7 @@ const body = document.querySelector('body');
 
 // import
 // canvas.style.backgroundImage = "url(../images/grass.png)";
-body.style.cursor = "url(../images/hammerIdle.png), auto";
+// body.style.cursor = "url(../images/hammerIdle.png), auto";
 buracoImg.src = "../images/buraco.png";
 moleImg.src = "../images/toupeirinha.png";
 
@@ -100,6 +100,8 @@ setInterval((() => {
   const timeoutID = setTimeout((() => {
     // drawToupeira('#FF0000', initialX - 5, initialY - 5, 50)
     createField()
+    ctx.clearRect(initialX, initialY - 20, 100, 140)
+    ctx.drawImage(buracoImg, initialX, initialY);
     globalMolePosition = {}
     clearTimeout(timeoutID)
   }), clearMoleInterval);
@@ -119,8 +121,8 @@ canvas.addEventListener('click', (evt) => {
       globalMolePosition = {};
       scoreText.innerHTML = score;
     }
-});
-
+  });
+  
 // sprite do cursor
 /*
 body.addEventListener('mousedown', () => {
