@@ -1,0 +1,14 @@
+h1, span {
+    user-select: none;
+    position: absolute;
+    display: inline-block;
+}
+
+body {
+    display: flex; 
+    margin: 5% auto auto 25%;
+}
+
+canvas {
+    box-sizing: border-box;
+}
