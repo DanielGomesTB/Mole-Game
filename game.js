@@ -10,7 +10,7 @@ const body = document.querySelector('body');
 
 // import
 // canvas.style.backgroundImage = "url(../images/grass.png)";
-// body.style.cursor = "url(../images/hammerIdle.png), auto";
+// document.documentElement.style.cursor = "url(../images/hammerIdle.png), auto";
 buracoImg.src = "../images/buraco.png";
 moleImg.src = "../images/toupeirinha.png";
 
@@ -86,19 +86,12 @@ const setMolePosition = () => {
   return positions[index];
 }
 
-// cria a toupeira
-const drawToupeira = (color, ini, end, dim) => {
-  setPath(color, ini + 5, end + 5, dim, dim)
-}
-
 // spawna a topeira
 setInterval((() => {
   const { initialX, initialY, finalX, finalY } = setMolePosition();
   globalMolePosition = { initialX, initialY, finalX, finalY };
-  // drawToupeira('#000', initialX, initialY, 40);
   ctx.drawImage(moleImg, initialX + 2.5, initialY - 16);
   const timeoutID = setTimeout((() => {
-    // drawToupeira('#FF0000', initialX - 5, initialY - 5, 50)
     createField()
     ctx.clearRect(initialX, initialY - 20, 100, 140)
     ctx.drawImage(buracoImg, initialX, initialY);
