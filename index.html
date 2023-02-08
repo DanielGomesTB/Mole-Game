@@ -6,15 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eh Mole</title>
   <link rel="shortcut icon" href="images/toupeirinha.ico" type="image/x-icon">
-  <style>
-    h1, span {
-      user-select: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas width="640px" height="480px" id="myCanvas" style="box-sizing: border-box"></canvas>
-    <h1>SCORE: <spa id="scoreText"></spa></h1>
-    <script src="game.js"></script>
+    <canvas width="640px" height="480px" id="myCanvas"></canvas>
+    <h1>SCORE: <span id="scoreText"></span></h1>
+    <div>
+      <h3>Dificuldade</h3>
+      <button type="button" id="easy_button">Fácil</button>
+      <button type="button">Médio</button>
+      <button type="button">Difícil</button>
+    </div>
+    <script type="module" src="game.js"></script>
 </body>
 </html>
